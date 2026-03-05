@@ -1,10 +1,10 @@
-# 🚀 Algorithms & Programming Labs (C/C++)
+# 🚀 Algorithms & Programming Labs (C/C++/Python)
 
 ![Language](https://img.shields.io/badge/language-C%2FC%2B%2B-blue)
 ![Course](https://img.shields.io/badge/course-Programming-green)
 ![Status](https://img.shields.io/badge/status-Student%20Project-success)
 
-Этот репозиторий содержит **лабораторные работы, домашние задания и алгоритмические задачи**, выполненные в рамках курса **программирования на C/C++**.
+Этот репозиторий содержит **лабораторные работы, домашние задания и алгоритмические задачи**, выполненные в рамках курса **программирования на C/C++**, а так же решение задач на Leetcode на алгоитмы на Python.
 
 В репозитории представлены:
 
@@ -369,14 +369,13 @@ Binary Search | Бинарный поиск |
 
 - условие задачи  
 - описание алгоритма  
-- реализацию на C++  
+- реализацию на Python  
 - анализ сложности  
 
 ---
 
 # 🛠 Используемые технологии
-C
-C++
+Python
 Algorithms
 Data Structures
 Pointers
@@ -418,6 +417,6 @@ repository
 
 Student Developer  
 
-C / C++ • Algorithms • Data Structures
+C / C++ / Python • Algorithms • Data Structures
 
 ⭐ Если репозиторий оказался полезным — поставьте **звезду**.
