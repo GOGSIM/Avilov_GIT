@@ -387,32 +387,6 @@ STL
 
 ---
 
-# 📁 Структура репозитория
-repository
-│
-├─ labs
-│ ├─ lab2.cpp
-│ ├─ lab3.cpp
-│ ├─ lab4.cpp
-│ ├─ lab5.cpp
-│ ├─ lab6.cpp
-│ └─ ...
-│
-├─ homework
-│ ├─ hw1.cpp
-│ ├─ hw2.cpp
-│ └─ hw3.cpp
-│
-├─ leetcode
-│ ├─ two_sum.cpp
-│ ├─ palindrome.cpp
-│ └─ ...
-│
-└─ README.md
-
-
----
-
 # 👨‍💻 Автор
 
 Student Developer  
