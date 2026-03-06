@@ -7,7 +7,6 @@
 ![C++](https://img.shields.io/badge/C++-language-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-algorithms-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
-![Repo](https://img.shields.io/badge/repository-student%20portfolio-purple?style=for-the-badge)
 
 **Репозиторий с лабораторными работами, домашними заданиями и алгоритмическими решениями.**  
 Здесь собраны задачи по основам программирования, работе с массивами, матрицами, файлами, указателями, динамической памятью, строками, списками и численными вычислениями.
@@ -35,11 +34,6 @@
 ---
 
 ## 📚 Содержание
-
-- [🧩 Структура репозитория](#-структура-репозитория)
-- [🧪 Лабораторные работы](#-лабораторные-работы)
-- [🏠 Домашние задания](#-домашние-задания)
-- [💻 LeetCode](#-leetcode)
 - [🛠 Используемые технологии](#-используемые-технологии)
 - [🎯 Ключевые навыки](#-ключевые-навыки)
 
