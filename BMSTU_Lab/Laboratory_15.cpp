@@ -11,15 +11,19 @@
 Вывести на экран исходный и полученный файлы.
 */
 
+
 //Part A
 #include <stdio.h>
 #include <string.h>
 
 const int MAX_LEN = 256;
 
-void createFile(const char* f_name){
+void createFile(const char* f_name) {
     FILE* f = fopen(f_name, "w");
-    if (f == NULL) { printf("ERROR"); return; }
+    if (f == NULL) {
+        printf("Error: failed to create file %s\n", f_name);
+        return;
+    }
 
     fputs("alpha betta gamma delita epsilon zelta\n", f);
     fputs("one two\n", f);
@@ -28,23 +32,26 @@ void createFile(const char* f_name){
     fputs("alloha\n", f);
 
     fclose(f);
+    printf("File %s successfully created.\n", f_name);
 }
 
-void removeLine(char* line){
-    int len = strlen(line);
-    if (len > 0 && line[len-1] == '\n'){
-        line[len-1] = '\0';
+int fileExists(const char* f_name) {
+    FILE* f = fopen(f_name, "r");
+    if (f == NULL) {
+        return 0;
     }
+    fclose(f);
+    return 1;
 }
 
-int countWords(char*line){
+int countWords(char* line) {
     char buffer[MAX_LEN];
     strcpy(buffer, line);
 
     int count = 0;
     char* token = strtok(buffer, " \t\n");
 
-    while (token != NULL){
+    while (token != NULL) {
         count++;
         token = strtok(NULL, " \t\n");
     }
@@ -52,16 +59,19 @@ int countWords(char*line){
     return count;
 }
 
-void returnFile(const char* f_name, const char* title){
+void printFile(const char* f_name, const char* title) {
     FILE* f = fopen(f_name, "r");
-    if (f == NULL) { printf("ERROR"); return; }
+    if (f == NULL) {
+        printf("Error: file %s does not exist or cannot be opened.\n", f_name);
+        return;
+    }
 
     char line[MAX_LEN];
 
     printf("\n%s:\n", title);
     printf("--------------------------------\n");
 
-    while (fgets(line, MAX_LEN, f) != NULL){
+    while (fgets(line, MAX_LEN, f) != NULL) {
         printf("%s", line);
     }
 
@@ -70,10 +80,10 @@ void returnFile(const char* f_name, const char* title){
     fclose(f);
 }
 
-void solution(const char* f_name, int* max_line_n, int* maxWords){
+void findMaxWordsLine(const char* f_name, int* max_line_n, int* maxWords) {
     FILE* f = fopen(f_name, "r");
-    if (f == NULL){
-        printf("ERROR");
+    if (f == NULL) {
+        printf("Error: file %s does not exist or cannot be opened.\n", f_name);
         *max_line_n = -1;
         *maxWords = 0;
         return;
@@ -84,11 +94,11 @@ void solution(const char* f_name, int* max_line_n, int* maxWords){
     *max_line_n = 0;
     *maxWords = -1;
 
-    while (fgets(line, MAX_LEN, f) != NULL){
+    while (fgets(line, MAX_LEN, f) != NULL) {
         curLine++;
         int words = countWords(line);
 
-        if (words > *maxWords){
+        if (words > *maxWords) {
             *maxWords = words;
             *max_line_n = curLine;
         }
@@ -97,12 +107,12 @@ void solution(const char* f_name, int* max_line_n, int* maxWords){
     fclose(f);
 }
 
-void removeLine(const char* f_name, int del_line){
+void removeLineFromFile(const char* f_name, int del_line) {
     FILE* in = fopen(f_name, "r");
     FILE* out = fopen("temp.txt", "w");
 
-    if (in == NULL || out == NULL){
-        printf("ERROR");
+    if (in == NULL || out == NULL) {
+        printf("Error opening files.\n");
 
         if (in != NULL) fclose(in);
         if (out != NULL) fclose(out);
@@ -112,10 +122,9 @@ void removeLine(const char* f_name, int del_line){
     char line[MAX_LEN];
     int curLine = 0;
 
-    while (fgets(line, MAX_LEN, in) != NULL){
+    while (fgets(line, MAX_LEN, in) != NULL) {
         curLine++;
-
-        if (curLine != del_line){
+        if (curLine != del_line) {
             fputs(line, out);
         }
     }
@@ -125,34 +134,122 @@ void removeLine(const char* f_name, int del_line){
 
     remove(f_name);
     rename("temp.txt", f_name);
+
+    printf("Line number %d has been deleted.\n", del_line);
 }
 
-int main(){
+void showMenu() {
+    printf("\n============= MENU =============\n");
+    printf("1. Create file\n");
+    printf("2. Show file content\n");
+    printf("3. Find line with maximum number of words\n");
+    printf("4. Delete line with maximum number of words\n");
+    printf("5. Run full task\n");
+    printf("0. Exit\n");
+    printf("================================\n");
+    printf("Enter menu option: ");
+}
+
+void clearInputBuffer() {
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF) {}
+}
+
+int main() {
     char f_name[] = "text.txt";
-    int max_line_n;
-    int maxWords;
+    int choice;
+    int max_line_n = -1;
+    int maxWords = 0;
+    int lineFound = 0;
 
-    createFile(f_name);
-    returnFile(f_name, "Initial file");
-    solution(f_name, &max_line_n, &maxWords);
+    do {
+        showMenu();
 
-    if (max_line_n <= 0){
-        printf("ERROR");
-        return 1;
-    }
+        if (scanf("%d", &choice) != 1) {
+            printf("Error: enter an integer from 0 to 5.\n");
+            clearInputBuffer();
+            continue;
+        }
 
-    printf("\nLine with maximum number of words: %d\n", max_line_n);
-    printf("\nNumber of words in this line: %d\n", maxWords);
+        clearInputBuffer();
 
-    removeLine(f_name, max_line_n);
-    returnFile(f_name, "Result file");
+        switch (choice) {
+            case 1:
+                createFile(f_name);
+                break;
+
+            case 2:
+                if (!fileExists(f_name)) {
+                    printf("File %s does not exist. Create it first.\n", f_name);
+                } else {
+                    printFile(f_name, "File content");
+                }
+                break;
+
+            case 3:
+                if (!fileExists(f_name)) {
+                    printf("File %s does not exist. Create it first.\n", f_name);
+                } else {
+                    findMaxWordsLine(f_name, &max_line_n, &maxWords);
+
+                    if (max_line_n <= 0) {
+                        printf("Failed to find the required line.\n");
+                    } else {
+                        printf("Line with maximum words: %d\n", max_line_n);
+                        printf("Number of words: %d\n", maxWords);
+                        lineFound = 1;
+                    }
+                }
+                break;
+
+            case 4:
+                if (!fileExists(f_name)) {
+                    printf("File %s does not exist. Create it first.\n", f_name);
+                } else {
+                    if (!lineFound) {
+                        findMaxWordsLine(f_name, &max_line_n, &maxWords);
+                    }
+
+                    if (max_line_n <= 0) {
+                        printf("No line to delete.\n");
+                    } else {
+                        removeLineFromFile(f_name, max_line_n);
+                        printFile(f_name, "File after deletion");
+                        lineFound = 0;
+                    }
+                }
+                break;
+
+            case 5:
+                createFile(f_name);
+                printFile(f_name, "Original file");
+
+                findMaxWordsLine(f_name, &max_line_n, &maxWords);
+
+                if (max_line_n <= 0) {
+                    printf("Error processing file.\n");
+                } else {
+                    printf("Line with maximum words: %d\n", max_line_n);
+                    printf("Number of words: %d\n", maxWords);
+
+                    removeLineFromFile(f_name, max_line_n);
+                    printFile(f_name, "Result file");
+                }
+                lineFound = 0;
+                break;
+
+            case 0:
+                printf("Program terminated.\n");
+                break;
+
+            default:
+                printf("Error: invalid menu option.\n");
+        }
+
+    } while (choice != 0);
 
     return 0;
 }
-
-
-
-
 
 
 //Part B
@@ -260,3 +357,4 @@ int main(){
 
     return 0;
 }
+    
