@@ -1,0 +1,273 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Documents API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Healthcheck",
+        "operationId": "healthcheck_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/search": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Search Documents",
+        "operationId": "search_documents_api_v1_documents_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentSearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}": {
+      "delete": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Delete Document",
+        "operationId": "delete_document_api_v1_documents__document_id__delete",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDocumentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DeleteDocumentResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "deleted": {
+            "type": "boolean",
+            "title": "Deleted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "deleted"
+        ],
+        "title": "DeleteDocumentResponse"
+      },
+      "DocumentRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "rubrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rubrics"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "rubrics",
+          "text",
+          "created_date"
+        ],
+        "title": "DocumentRead"
+      },
+      "DocumentSearchResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentRead"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "DocumentSearchResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "postgres": {
+            "type": "string",
+            "title": "Postgres"
+          },
+          "elasticsearch": {
+            "type": "string",
+            "title": "Elasticsearch"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "postgres",
+          "elasticsearch"
+        ],
+        "title": "HealthResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
