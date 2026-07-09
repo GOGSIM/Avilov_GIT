@@ -162,6 +162,9 @@ docker compose exec api alembic upgrade head
 data/sample.csv
 ```
 
+Файл сохранен в UTF-8 with BOM и использует `;` как разделитель, чтобы его было
+удобно открыть в Excel на Windows.
+
 Импорт:
 
 ```bash
@@ -178,7 +181,7 @@ docker compose exec api python -m app.cli import-csv /app/data/sample.csv
 | `created_date` | дата создания в ISO-формате |
 
 При импорте документы сохраняются в PostgreSQL и сразу индексируются в
-Elasticsearch.
+Elasticsearch. Импорт поддерживает CSV с разделителем `,` или `;`.
 
 ## Переиндексация
 

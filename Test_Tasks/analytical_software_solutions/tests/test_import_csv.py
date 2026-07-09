@@ -23,6 +23,21 @@ def test_read_rows_parses_csv(tmp_path: Path):
     assert parsed_csv.skipped == 0
 
 
+def test_read_rows_parses_excel_friendly_semicolon_csv(tmp_path: Path):
+    csv_path = tmp_path / "documents.csv"
+    csv_path.write_text(
+        "id;rubrics;text;created_date\n"
+        '1;"news, analytics";"текст для поиска";2024-01-01T00:00:00+00:00\n',
+        encoding="utf-8-sig",
+    )
+
+    parsed_csv = _read_rows(csv_path)
+
+    assert parsed_csv.rows[0]["id"] == 1
+    assert parsed_csv.rows[0]["rubrics"] == ["news", "analytics"]
+    assert parsed_csv.rows[0]["text"] == "текст для поиска"
+
+
 @pytest.mark.asyncio
 async def test_import_csv_saves_and_indexes_rows(tmp_path: Path):
     csv_path = tmp_path / "documents.csv"

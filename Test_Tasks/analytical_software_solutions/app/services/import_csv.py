@@ -59,7 +59,10 @@ def _read_rows(path: Path) -> ParsedCsv:
     skipped = 0
 
     with path.open(encoding="utf-8-sig", newline="") as csv_file:
-        reader = csv.DictReader(csv_file)
+        sample = csv_file.read(4096)
+        csv_file.seek(0)
+        dialect = _detect_dialect(sample)
+        reader = csv.DictReader(csv_file, dialect=dialect)
         fieldnames = set(reader.fieldnames or [])
         missing_columns = REQUIRED_COLUMNS - fieldnames
         if missing_columns:
@@ -76,6 +79,13 @@ def _read_rows(path: Path) -> ParsedCsv:
     if skipped:
         logger.info("Skipped %s invalid CSV rows.", skipped)
     return ParsedCsv(rows=documents, read=read, skipped=skipped)
+
+
+def _detect_dialect(sample: str) -> csv.Dialect:
+    try:
+        return csv.Sniffer().sniff(sample, delimiters=",;")
+    except csv.Error:
+        return csv.excel
 
 
 def _normalize_row(row: dict[str, str | None]) -> dict[str, Any]:
